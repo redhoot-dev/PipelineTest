@@ -28,7 +28,13 @@
       if (url) {
         const img = document.createElement('img');
         img.src = url;
-        container.appendChild(img);
+        img.alt = "Attachment Image";
+        img.onload = () => {
+          container.appendChild(img);
+        };
+        img.onerror = () => {
+          container.innerHTML = '<p>Failed to load image</p>';
+        };
       } else {
         container.innerHTML = '<p>No attachments found</p>';
       }
