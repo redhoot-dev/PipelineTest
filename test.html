@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attachments Viewer</title>
+  <style>
+    #image-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    img {
+      max-width: 100%;
+      max-height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div id="image-container">
+    <p>Select a row to view attachments</p>
+  </div>
+
+  <script>
+    // Function to display the image
+    function displayImage(url) {
+      const container = document.getElementById('image-container');
+      container.innerHTML = ''; // Clear existing content
+
+      if (url) {
+        const img = document.createElement('img');
+        img.src = url;
+        container.appendChild(img);
+      } else {
+        container.innerHTML = '<p>No attachments found</p>';
+      }
+    }
+
+    // Listen for Grist row selection changes
+    window.grist.ready().then(() => {
+      window.grist.onRecords((records, { tableId, columnIds }) => {
+        if (records.length === 1) {
+          const record = records[0];
+          const attachments = record.Attachments;
+
+          if (attachments && attachments.length > 0) {
+            displayImage(attachments[0]); // Display the first attachment
+          } else {
+            displayImage(null);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
